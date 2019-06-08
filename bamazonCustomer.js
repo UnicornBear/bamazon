@@ -31,6 +31,7 @@ var makeTable = function(){
     })
 }
 
+// create function to interact with the customer
 var askCustomer = function(res){
     inquirer.prompt([{
         type:'input',
@@ -38,6 +39,7 @@ var askCustomer = function(res){
         message:"Hello, what would you like to purchase?"
     }]).then(function(answer){
         var correct = false;
+        //if customer chooses 'Q' - then exit app process
         if(answer.choice.toUpperCase()=="Q"){
             process.exit();
         }
@@ -57,7 +59,7 @@ var askCustomer = function(res){
                             return false;
                         }
                     }
-                }).then(function(answer){
+                }).then(function(answer){   
                     if((res[id].stock_quantity-answer.quant)>0){
                         connection.query("UPDATE products SET stock_quantity='"+
                         (res[id].stock_quantity-answer.quant)+
