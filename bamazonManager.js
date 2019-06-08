@@ -56,13 +56,36 @@ var askManager = function(res) {
 
 // create function to add Item to bamazon.products (product_name)
 function addItem(){
-
+    inquirer.prompt([{
+        type:"input",
+        name:"productname",
+        message:"What is product name you would like to add?"
+    },{
+        type:"input",
+        name:"departmentname",
+        message:"What department?"
+    },{
+        type:"input",
+        name:"price",
+        message:"What is the price?"
+    },{
+        type:"input",
+        name:"stockquantity",
+        message:"How many to add?"
+    }]).then(function(val){
+        connection.query("INSERT INTO products (product_name,department_name,price,stock_quantity) VALUES ('"+val.productname+"','"+val.departmentname+"','"+val.price+"','"+val.stockquantity+"');",
+        function(err,res){ 
+            if(err)throw err;
+            console.log(val.productname+" Added to the Bamazon");
+            makeTable();
+        })
+    })
 }
 
 //create funection to add Quantity to a bamazon.product (stock_quantity)
-function addQuantity(res){
+// function addQuantity(res){
 
-}
+// }
 
 
 makeTable();
