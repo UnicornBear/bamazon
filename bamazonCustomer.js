@@ -38,12 +38,44 @@ var askCustomer = function(res){
         message:"Hello, what would you like to purchase?"
     }]).then(function(answer){
         var correct = false;
+        if(answer.choice.toUpperCase()=="Q"){
+            process.exit();
+        }
         for(var i=0;i<res.length;i++){
-            if(res[i].productname==answer.choice){
+            if(res[i].product_name==answer.choice){
                 correct=true;
                 var product=answer.choice;
                 var id=i;
+                inquirer.prompt({
+                    type:"input",
+                    name:"quant",
+                    message:"How many would you like to purchase?",
+                    validate: function(value){
+                        if(isNaN(value)==false){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }).then(function(answer){
+                    if((res[id].stock_quantity-answer.quant)>0){
+                        connection.query("UPDATE products SET stock_quantity='"+
+                        (res[id].stock_quantity-answer.quant)+
+                        "' WHERE product_name='"+product+"'", 
+                    function(err,res2){
+                        console.log("You Purchased the Product");
+                        makeTable();
+                        })
+                    } else {
+                        console.log("Not a Valid Purhcase!");
+                        askCustomer(res);
+                    }
+                })
             }
+        }
+        if(i==res.length && correct==false){
+            console.log("This is not a valid selection");
+            askCustomer(res);
         }
     })
 }
