@@ -1,20 +1,49 @@
-const mysql = require("mysql")
-const inquirer = require("inquirer")
+var mysql = require("mysql");
+var inquirer = require("inquirer");
 
 //  create the connection to mySQL database
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 8080,
+var connection = mysql.createConnection({
+    host:"localhost",
+    port:3306,
     // login info for mySQL db
-    user: "root",
-    password: "3H$tal24Bear",
+    user:"root",
+    password:"3H$tal24Bear",
     // database used for app
-    database: "bamazon"
-});
+    database:"bamazon"
+})
 
 // connect to mySQL 
 connection.connect(function(err) {
-    if (err) throw err
-    
-});
+    if (err) throw err;
+    console.log("Connection Successful");
+    makeTable();
+})
 
+// create function to display table for bamazon products 
+var makeTable = function(){
+    connection.query("SELECT * FROM products", function(err,res){
+        for(var i=0; i<res.length; i++){
+            console.log(res[i].item_id+" | "+res[i].product_name+" | "+
+            res[i].department_name+" | "+res[i].price+" | "+
+            res[i].stock_quantity+"\n");
+        }
+    askCustomer(res);
+    })
+}
+
+var askCustomer = function(res){
+    inquirer.prompt([{
+        type:'input',
+        name:'choice',
+        message:"Hello, what would you like to purchase?"
+    }]).then(function(answer){
+        var correct = false;
+        for(var i=0;i<res.length;i++){
+            if(res[i].productname==answer.choice){
+                correct=true;
+                var product=answer.choice;
+                var id=i;
+            }
+        }
+    })
+}
