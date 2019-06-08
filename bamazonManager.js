@@ -35,4 +35,34 @@ var makeTable = function(){
     })
 }
 
+// create function to ask Manager what they want to do
+var askManager = function(res) {
+    inquirer.prompt([{
+        type:"rawlist",
+        name:"choice",
+        message:"What woudl you like to do",
+        choices:["add new item","add quantity"]
+    }]).then(function(val){
+        //choice - add new item
+        if(val.choice=='add new item'){
+            addItem();
+        }
+        //choice - add quantity
+        if(val.choice=="add quantity"){
+            addQuatity(res);
+        }
+    })
+}
+
+// create function to add Item to bamazon.products (product_name)
+function addItem(){
+
+}
+
+//create funection to add Quantity to a bamazon.product (stock_quantity)
+function addQuantity(res){
+
+}
+
+
 makeTable();
