@@ -32,6 +32,7 @@ var makeTable = function(){
             res[i].stock_quantity);
         }
     console.log("-----------------------------");
+    askManager();
     })
 }
 
@@ -40,7 +41,7 @@ var askManager = function(res) {
     inquirer.prompt([{
         type:"rawlist",
         name:"choice",
-        message:"What woudl you like to do",
+        message:"What would you like to do",
         choices:["add new item","add quantity"]
     }]).then(function(val){
         //choice - add new item
@@ -82,10 +83,24 @@ function addItem(){
     })
 }
 
-//create funection to add Quantity to a bamazon.product (stock_quantity)
-// function addQuantity(res){
-
-// }
-
+// create funection to add Quantity to a bamazon.product (stock_quantity)
+function addQuantity(res){
+    inquirer.prompt([{
+        type:"input",
+        name:"productname",
+        message:"What product are you adding quantity?"
+    },{
+        type:"input",
+        name:"addquantity",
+        message:"What quantity are you adding?"
+    }]).then(function(val){
+        for(i=0;i<res.length;i++){
+            if(res[i].product_name==val.productname){
+                connection.query("UPDATE products SET stock_quantity=stockquantity+
+                ")
+            }
+        }
+    })
+}
 
 makeTable();
