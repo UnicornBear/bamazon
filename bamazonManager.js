@@ -13,11 +13,12 @@ var connection = mysql.createConnection({
     database:"bamazon"
 })
 
+// connection if error throw error
 connection.connect(function (err) {
     if (err) throw err;
 });
 
-console.log("Welcome to Bamazon!");
+console.log("Welcome to Bamazon - Manager!");
 start();
 
 
@@ -51,25 +52,26 @@ function start() {
                 break;
 
             case "Quit":
-                quitfun();
+                quit();
                 break;                
-
         }
-
     });
 }
 
 
 //function to "View Products for Sale". Select table from Database and display the table using cli-table.
 function display() {
+    // query database to show all products
     connection.query("SELECT * FROM products", 
     function (err, res) {
         if (err) throw err;
+
+        // display table using cli-table
         var table = new Table({
             head: ["ID", "Product Name", "Department", "Price", "Stock Qty", "Product Sales"],
-            colWidths: [6, 45, 16, 11, 11, 11]
+            colWidths: [6, 45, 16, 11, 11, 16]
         });
-    
+        // loop through and report all possible values for all fields
         for (var i = 0; i < res.length; i++) {
             table.push(
                 [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity, res[i].product_sales], 
@@ -81,23 +83,22 @@ function display() {
 };
 
 
-
 //function to View Low Inventory.
 function viewLowInv() {
-    //query database to list items with an inventory count lower than five.
-    var query = "SELECT * FROM products WHERE stock_quantity <= 10";
-    connection.query(query, function(err, res){
+    // query database to show products when <=10
+    connection.query("SELECT * FROM products WHERE stock_quantity <= 10", 
+    function(err, res){
         if (err) throw err;
 
-        //display the table using cli-table.
+        // display table using cli-table
         var table = new Table({
-            head: ["ID", "Product Name", "Department", "Price", "Stock Qty"],
-            colWidths: [6, 45, 16, 11, 11]
+            head: ["ID", "Product Name", "Department", "Price", "Stock Qty", "Product Sales"],
+            colWidths: [6, 45, 16, 11, 11, 16]
         });
-    
+        // loop through and report all possible values for all fields
         for (var i = 0; i < res.length; i++) {
             table.push(
-                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity],
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity, res[i].product_sales], 
             );
         }
         console.log(table.toString());
@@ -106,7 +107,7 @@ function viewLowInv() {
 };
 
 
-//function to Add to Inventory
+// function to Add to Inventory
 function addInv() {
     //prompt questions to get selected item id and quantity
     inquirer.prompt([
@@ -119,6 +120,7 @@ function addInv() {
                 if (!isNaN(inputID)) {
                     return true;
                 }
+                // ask to enter a valid itemID
                 console.log("Please enter a valid ID.");
                 return false;
             }
@@ -132,6 +134,7 @@ function addInv() {
                 if (!isNaN(inputQ)) {
                     return true;
                 }
+                // ask to enter a valid quantity number
                 console.log("Please enter a valid quantity.");
                 return false;
             }
@@ -156,26 +159,19 @@ function addInv() {
             
             //update the quantity for selected item id
             connection.query("UPDATE products SET ? WHERE ?",
-                [
-                    {
+                [{
                     stock_quantity: chosenItem.stock_quantity += parseInt(answer.quantity)
-                    },
-                    {
-                    item_id: chosenItem.item_id
-                    }
-                ],
-                function(error) {
-                    if (error) throw err;
+                },{
+                    item_id: chosenItem.item_id   
+                }],
+                function(err) {
+                    if (err) throw err;
                     //show message that certain product and its quantity has been updated in the inventory.
                     console.log("Successfully updated/added "+ answer.quantity + " " + chosenItem.product_name + " to the inventory.");
                     display();
-                }
-                );
-
+                });
         });
-
     });
-
 };
 
 
@@ -190,9 +186,10 @@ function addProduct() {
         },
         {
             type: "list",
+            // type: "input",
             name: "department",
             message: "Which department does this product fall into?",
-            choices: ["Electronics", "Beauty", "Shoes", "Sports", "Home", "Books"]
+            choices: ["Toys", "Costumes", "Electronics", "Toys", "VHS"] 
         },
         {
             type: "input",
@@ -208,37 +205,38 @@ function addProduct() {
         },
         {
             type: "input",
-            name: "iniQuantity",
+            name: "newQuantity",
             message: "How many do we have?",
-            validate: function(iniQuantity) {
-                if (!isNaN(iniQuantity)) {
+            validate: function(newQuantity) {
+                if (!isNaN(newQuantity)) {
                     return true;
                 }
                 console.log("Please enter a valid quantity.");
                 return false;
             }
         }
+    // function to use the answers
     ]).then(function (answers){
-
-        //grab the new product info from answer and add to (insert into) the database table
-        var queryString = "INSERT INTO products SET ?";
-        connection.query(queryString, {
-            product_name: answers.newProductName,
+        // query to input answers into products table
+        connection.query("INSERT INTO products SET ?", 
+        [{  product_name: answers.newProductName,
             department_name: answers.department,
             price: answers.cost,
-            stock_quantity: answers.iniQuantity,
-        })
-
-        //show message that the product has been added.
-        console.log(answers.newProductName + " has been added to Bamazon.");
-
-        display();
-    });     
-
-};
+            stock_quantity: answers.newQuantity,
+            product_sales: 0
+        }], 
+        // function if error else product has been added
+        function(err) {
+            if (err) throw err;
+            //show message that the product has been added.
+            console.log(answers.newProductName + " has been added to Bamazon.\n");
+            display();
+        });     
+    });
+};  
 
 
 //function to quit the program
-function quitfun() {
+function quit() {
     connection.end();
-};
+};  
