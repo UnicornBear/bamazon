@@ -12,4 +12,16 @@ CREATE TABLE products (
   PRIMARY KEY (item_id)
 );
 
+ALTER TABLE products ADD product_sales DECIMAL(10,2) NOT NULL;
+
+
 SELECT * FROM products;
+
+
+CREATE TABLE departments (
+department_id INTEGER(10) auto_increment NOT NULL PRIMARY KEY UNIQUE,
+department_name VARCHAR(100) NOT NULL,
+over_head_cost DECIMAL(10,2) NOT NULL
+); 
+
+SELECT * FROM departments;

@@ -66,13 +66,13 @@ function display() {
     function (err, res) {
         if (err) throw err;
         var table = new Table({
-            head: ["ID", "Product Name", "Department", "Price", "Stock Qty"],
-            colWidths: [6, 45, 16, 11, 11]
+            head: ["ID", "Product Name", "Department", "Price", "Stock Qty", "Product Sales"],
+            colWidths: [6, 45, 16, 11, 11, 11]
         });
     
         for (var i = 0; i < res.length; i++) {
             table.push(
-                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity],
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity, res[i].product_sales], 
             );
         }
         console.log(table.toString());

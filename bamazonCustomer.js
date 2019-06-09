@@ -18,7 +18,7 @@ connection.connect(function(err) {
     if (err) throw err;
     // console log to check if successful connection
     // console.log("Connection Successful");
-})
+}) 
 
 console.log("Welcome Customer, to Bamazon!")
 display();
@@ -36,7 +36,7 @@ function display(){
         
         for (var i = 0; i < res.length; i++) {
             table.push(
-                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity],
+                [res[i].item_id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity], 
             );
         }
         console.log(table.toString());
@@ -103,7 +103,8 @@ function start() {
                   "UPDATE products SET ? WHERE ?",
                   [
                     {
-                      stock_quantity: chosenItem.stock_quantity-= parseInt(answer.quantity)
+                      stock_quantity: chosenItem.stock_quantity-= parseInt(answer.quantity),
+                      product_sales: chosenItem.product_sales + answer.quantity * chosenItem.price
                     },
                     {
                       item_id: chosenItem.item_id
@@ -118,7 +119,7 @@ function start() {
                     display();
                   }
                 );
-              }
+              } 
               else {
                 //show error message when inventory is not sufficient to prevent the order from going through.
                 console.log("Sorry. Insufficient quantity! Please select another item or change your quantity.");

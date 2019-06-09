@@ -23,3 +23,39 @@ VALUES
 ;	
     
 SELECT * FROM products;
+
+INSERT INTO departments (department_name, over_head_cost)
+VALUES
+	("Toys",1000),
+	("Costumes",1000),
+	("Electronics",1000),
+	("VHS",1000)
+;
+
+SELECT * FROM departments;
+
+
+SELECT departments.department_name, departments.over_head_cost, products.product_sales
+FROM departments
+INNER JOIN products
+	ON departments.department_name = products.department_name;
+
+SELECT departments.department_name AS 'Department', 
+  SUM(departments.over_head_cost) AS 'Overhead Cost', 
+  SUM(products.product_sales) AS 'Total Sales' 
+FROM departments
+INNER JOIN products
+	on products.department_name=departments.department_name
+GROUP BY departments.department_name;
+
+
+SELECT department_name AS 'Department', 
+   SUM(departments.over_head_cost) AS 'Overhead Cost' 
+FROM departments 
+GROUP BY departments.department_name;	
+
+
+SELECT department_name AS 'Department',
+   SUM(products.product_sales) AS 'Total Sales' 
+FROM products 
+GROUP BY products.department_name;
