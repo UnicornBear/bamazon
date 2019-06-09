@@ -20,9 +20,8 @@ connection.connect(function(err) {
     // console.log("Connection Successful");
 }) 
 
-console.log("Welcome to Bamazon - Customer!")
+console.log("Welcome to Bamazon - What Product would you like to purchase?")
 display();
-
 
 // create function to display table for bamazon products 
 function display(){
@@ -58,8 +57,8 @@ function start() {
                     connection.end();
                     process.exit();
                 }
-                //users need to enter a number between 1 to 10 because there are 10 items in the table.
-                else if ((!isNaN(inputID)) && (inputID<=10) && (inputID>0)) {
+                //users can only choose from 1 to 20 - bamazon is the little brother
+                else if ((!isNaN(inputID)) && (inputID<=20) && (inputID>0)) {
                     return true;
                 }
                 console.log("Please enter a valid ID.");
@@ -116,7 +115,7 @@ function start() {
                     var totalCost = answer.quantity * chosenItem.price;
                     console.log("Thank you. Successfully purchased "+ answer.quantity + " " + chosenItem.product_name + ".");
                     console.log("Your total cost is $"+ totalCost + ".");
-                    display();
+                    quitfun();
                    }
                 );
               } 
