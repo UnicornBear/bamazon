@@ -59,7 +59,7 @@ function displayDepartments() {
         // display table using cli-table
         var table = new Table({
             head: ["Department ID", "Department Name", "Over Head Costs"],
-            colWidths: [6, 45, 16]
+            colWidths: [6, 45, 18]
         });
         // loop through and report all possible values for all fields
         for (var i = 0; i < res.length; i++) {
@@ -82,7 +82,7 @@ function display() {
         // display table using cli-table
         var table = new Table({
             head: ["Department ID", "Department Name", "Over Head Costs", "Product Sales", "Total Profit"],
-            colWidths: [6, 45, 16, 11, 11]
+            colWidths: [6, 45, 18, 16, 16]
         });
         // loop through and report all possible values for all fields
         for (var i = 0; i < res.length; i++) {
