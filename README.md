@@ -3,7 +3,8 @@ Assignment 10 - mySQL and Node.js
 - Build a command line app the mimics an online store using nodejs and mysql
 
 # bamazon DEMO Video
-update url link to DEMO
+https://www.youtube.com/watch?v=DLi1Twou55c
+
 
 # Overview
 In this activity, you'll be creating an Amazon-like storefront with the MySQL skills you learned this unit. The app will take in orders from customers and deplete stock from the store's inventory. As a bonus task, you can program your app to track product sales across your store's departments and then provide a summary of the highest-grossing departments in the store.
